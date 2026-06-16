@@ -1,0 +1,309 @@
+/* Harshwardhan's PA Widget Styles */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
+
+#pa-widget-container {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 9999;
+    font-family: 'Poppins', sans-serif;
+    color: white;
+}
+
+/* Chat Bubble */
+#pa-bubble {
+    width: 65px;
+    height: 65px;
+    background: linear-gradient(135deg, #dc2626, #7f1d1d);
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    box-shadow: 0 0 20px rgba(220, 38, 38, 0.5);
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+#pa-bubble:hover {
+    transform: scale(1.1);
+}
+
+#pa-bubble img {
+    width: 45px;
+    height: 45px;
+    object-fit: cover;
+    pointer-events: none;
+}
+
+/* Chat Modal */
+#pa-chat-modal {
+    position: absolute;
+    bottom: 85px;
+    right: 0;
+    width: 380px;
+    height: 600px;
+    max-height: 80vh;
+    background: rgba(20, 20, 20, 0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    transform-origin: bottom right;
+    transition: transform 0.3s ease, opacity 0.3s ease;
+    opacity: 0;
+    transform: scale(0.8) translateY(20px);
+    pointer-events: none;
+}
+
+#pa-chat-modal.open {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    pointer-events: all;
+}
+
+/* Header */
+#pa-chat-header {
+    padding: 16px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.pa-header-left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.pa-header-left img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #dc2626, #7f1d1d);
+    padding: 4px;
+}
+
+.pa-header-title {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0;
+}
+
+.pa-header-subtitle {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.6);
+    margin: 0;
+}
+
+.pa-header-actions {
+    display: flex;
+    gap: 12px;
+}
+
+.pa-header-actions button {
+    background: none;
+    border: none;
+    color: rgba(255, 255, 255, 0.7);
+    cursor: pointer;
+    padding: 4px;
+    border-radius: 8px;
+    transition: color 0.2s, background 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pa-header-actions button:hover {
+    color: white;
+    background: rgba(255, 255, 255, 0.1);
+}
+
+/* Chat Body */
+#pa-chat-body {
+    flex: 1;
+    padding: 20px;
+    overflow-y: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+#pa-chat-body::-webkit-scrollbar {
+    width: 6px;
+}
+#pa-chat-body::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 10px;
+}
+
+.pa-message {
+    max-width: 85%;
+    padding: 12px 16px;
+    border-radius: 16px;
+    font-size: 14px;
+    line-height: 1.5;
+    animation: fadeIn 0.3s ease;
+    word-wrap: break-word;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.pa-message.bot {
+    align-self: flex-start;
+    background: rgba(255, 255, 255, 0.1);
+    border-bottom-left-radius: 4px;
+}
+
+.pa-message.user {
+    align-self: flex-end;
+    background: linear-gradient(135deg, #dc2626, #991b1b);
+    border-bottom-right-radius: 4px;
+}
+
+/* Quick Actions */
+.pa-quick-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.pa-quick-btn {
+    background: rgba(220, 38, 38, 0.2);
+    border: 1px solid rgba(220, 38, 38, 0.4);
+    color: white;
+    padding: 8px 12px;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.pa-quick-btn:hover {
+    background: rgba(220, 38, 38, 0.6);
+    transform: translateY(-2px);
+}
+
+/* Input Area */
+#pa-chat-footer {
+    padding: 16px 20px;
+    background: rgba(255, 255, 255, 0.05);
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+#pa-chat-input-container {
+    display: flex;
+    gap: 12px;
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 6px 16px;
+    align-items: center;
+}
+
+#pa-chat-input-container:focus-within {
+    border-color: rgba(220, 38, 38, 0.6);
+}
+
+#pa-chat-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    color: white;
+    font-size: 14px;
+    font-family: inherit;
+    padding: 8px 0;
+    outline: none;
+}
+
+#pa-chat-input::placeholder {
+    color: rgba(255, 255, 255, 0.4);
+}
+
+#pa-send-btn {
+    background: none;
+    border: none;
+    color: #ef4444;
+    cursor: pointer;
+    padding: 4px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.2s, color 0.2s;
+}
+
+#pa-send-btn:hover {
+    color: #fca5a5;
+    transform: scale(1.1) rotate(5deg);
+}
+
+#pa-send-btn:disabled {
+    color: rgba(255, 255, 255, 0.2);
+    cursor: not-allowed;
+    transform: none;
+}
+
+/* Typing Indicator */
+.pa-typing {
+    display: flex;
+    gap: 4px;
+    padding: 16px 20px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 16px;
+    border-bottom-left-radius: 4px;
+    align-self: flex-start;
+    width: fit-content;
+}
+
+.pa-dot {
+    width: 6px;
+    height: 6px;
+    background: white;
+    border-radius: 50%;
+    animation: typing 1.4s infinite ease-in-out both;
+}
+
+.pa-dot:nth-child(1) { animation-delay: -0.32s; }
+.pa-dot:nth-child(2) { animation-delay: -0.16s; }
+
+@keyframes typing {
+    0%, 80%, 100% { transform: scale(0); }
+    40% { transform: scale(1); }
+}
+
+@media (max-width: 480px) {
+    #pa-widget-container {
+        bottom: 20px;
+        right: 20px;
+    }
+    
+    #pa-chat-modal {
+        position: fixed;
+        bottom: 0;
+        right: 0;
+        width: 100%;
+        height: 100%;
+        max-height: 100%;
+        border-radius: 0;
+        transform-origin: bottom center;
+    }
+    
+    #pa-bubble {
+        display: none; /* Hide bubble when modal is full screen? No, keep it, but hide when modal open */
+    }
+    #pa-chat-modal.open ~ #pa-bubble {
+        display: none; /* We'll handle this in JS if needed */
+    }
+}
