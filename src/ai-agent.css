@@ -298,12 +298,11 @@
         max-height: 100%;
         border-radius: 0;
         transform-origin: bottom center;
+        z-index: 10000;
     }
     
-    #pa-bubble {
-        display: none; /* Hide bubble when modal is full screen? No, keep it, but hide when modal open */
-    }
-    #pa-chat-modal.open ~ #pa-bubble {
-        display: none; /* We'll handle this in JS if needed */
+    /* Only hide the bubble when the modal is actually open */
+    #pa-chat-modal.open + #pa-bubble {
+        display: none;
     }
 }
