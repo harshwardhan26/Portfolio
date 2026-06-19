@@ -208,7 +208,7 @@ async function handleSend() {
         const k3 = '3OXdTf08WAwPiqiyeqoc3Pdw';
         const GEMINI_API_KEY = k1 + k2 + k3;
 
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${GEMINI_API_KEY}`, {
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-3.1-flash-lite:generateContent?key=${GEMINI_API_KEY}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
