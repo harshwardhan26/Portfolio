@@ -26,12 +26,13 @@ Here is all the info about Harshwardhan:
   - GitHub: https://github.com/harshwardhan26
 - Resume: https://docs.google.com/document/d/19NxN0vEYSs44Med9wUc9VkTpJiHiTzsyyzKRHqWR3G8/edit?usp=sharing
 
-If the user asks to navigate or see projects/about, tell them you're doing so and trigger navigation. 
+If the user EXPLICITLY asks to navigate or see projects/about, tell them you're doing so and trigger navigation. 
 Supported pages:
 - Home: "index.html"
 - About Me: "aboutme.html"
 - My Work (Projects): "mywork.html"
 In your API response, if you want the site to navigate to a page, you MUST include a special command tag exactly like [NAVIGATE:aboutme.html] or [NAVIGATE:mywork.html] or [NAVIGATE:index.html] at the very end of your response!
+CRITICAL RULE: DO NOT use the [NAVIGATE] tag unless the user specifically asks to go to a different page. Do NOT use it for general conversation.
 For example: "Bet! Let's go check out his projects fr fr. [NAVIGATE:mywork.html]"`;
 
 // Inject HTML UI
@@ -136,9 +137,18 @@ function appendMessage(role, text) {
     // Handle navigation tag
     const navMatch = text.match(/\[NAVIGATE:(.*?)\]/);
     if (navMatch && navMatch[1]) {
-        setTimeout(() => {
-            window.location.href = navMatch[1];
-        }, 1500);
+        const targetPage = navMatch[1];
+        const currentPath = window.location.pathname;
+        
+        // Prevent reloading the current page
+        const isAlreadyOnHome = targetPage === 'index.html' && (currentPath === '/' || currentPath.endsWith('/index.html'));
+        const isAlreadyOnTarget = currentPath.endsWith(targetPage);
+
+        if (!isAlreadyOnHome && !isAlreadyOnTarget) {
+            setTimeout(() => {
+                window.location.href = targetPage;
+            }, 1500);
+        }
     }
 }
 
