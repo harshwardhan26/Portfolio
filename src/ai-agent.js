@@ -171,28 +171,35 @@ function triggerFlowersEffect() {
 
     const flowers = ['🌸', '🌺', '🌻', '🌹', '🌷', '🌼'];
     
-    for (let i = 0; i < 50; i++) {
+    // Spawn 300 flowers for a full screen effect
+    for (let i = 0; i < 300; i++) {
         const flower = document.createElement('div');
         flower.textContent = flowers[Math.floor(Math.random() * flowers.length)];
         flower.style.position = 'absolute';
         flower.style.left = Math.random() * 100 + 'vw';
-        flower.style.top = '-50px';
-        flower.style.fontSize = (Math.random() * 20 + 20) + 'px';
-        flower.style.transition = 'top 3s linear, left 3s ease-in-out';
+        flower.style.top = '-100px';
+        flower.style.fontSize = (Math.random() * 30 + 15) + 'px'; // Random sizes between 15px and 45px
+        
+        // Random falling speed (between 2s and 5s) and rotation
+        const fallDuration = (Math.random() * 3 + 2) + 's';
+        const rotation = (Math.random() * 360 - 180) + 'deg';
+        
+        flower.style.transition = `top ${fallDuration} linear, left ${fallDuration} ease-in-out, transform ${fallDuration} linear`;
         
         container.appendChild(flower);
 
-        // Animate falling
+        // Animate falling and spinning
         setTimeout(() => {
-            flower.style.top = '110vh';
-            flower.style.left = (parseFloat(flower.style.left) + (Math.random() * 20 - 10)) + 'vw';
+            flower.style.top = '120vh';
+            flower.style.left = (parseFloat(flower.style.left) + (Math.random() * 40 - 20)) + 'vw';
+            flower.style.transform = `rotate(${rotation})`;
         }, 50);
     }
 
     // Clean up
     setTimeout(() => {
         container.remove();
-    }, 4000);
+    }, 6000);
 }
 
 function appendQuickActions() {
