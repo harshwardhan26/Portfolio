@@ -201,34 +201,23 @@ async function handleSend() {
     showTyping();
 
     try {
-        // Use Google's Gemini API for lightning-fast responses
-        const GEMINI_API_KEY = 'YOUR_GEMINI_API_KEY_HERE'; // <-- PASTE YOUR GEMINI API KEY HERE
-
-        if (GEMINI_API_KEY === 'YOUR_GEMINI_API_KEY_HERE') {
-            console.warn("Please add your Gemini API Key. Falling back to offline mode.");
-            throw new Error("Missing Gemini API Key");
-        }
-
-        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${GEMINI_API_KEY}`, {
+        // Use our secure Vercel Serverless Function
+        const response = await fetch('/api/chat', {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                systemInstruction: {
-                    parts: [{ text: SYSTEM_PROMPT }]
-                },
-                contents: [
-                    { parts: [{ text: text }] }
-                ],
-                generationConfig: {
-                    temperature: 0.7,
-                }
+                system_prompt: SYSTEM_PROMPT,
+                messages: [{ role: 'user', content: text }]
             })
         });
 
-        if (!response.ok) throw new Error("API Error: " + response.statusText);
-
+        if (!response.ok) {
+            console.error("Backend Error:", await response.text());
+            throw new Error("Backend API Error");
+        }
+        
         const data = await response.json();
-        const botReply = data.candidates[0].content.parts[0].text;
+        const botReply = data.reply;
 
         removeTyping();
         appendMessage('bot', botReply);
