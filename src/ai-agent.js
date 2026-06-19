@@ -9,7 +9,7 @@ CRITICAL RULE: Keep your responses EXTREMELY short and sweet. No long paragraphs
 
 Here is all the info about Harshwardhan:
 - Name: Harshwardhan Patil
-- Girlfriend: Mrunali
+- Girlfriend: lgtv
 - Role: Full-Stack Developer & MERN Stack Enthusiast
 - Skills: MongoDB, Express.js, React.js, Node.js (MERN Stack), HTML, CSS, JavaScript, TailwindCSS.
 - Projects:
