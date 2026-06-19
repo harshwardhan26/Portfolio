@@ -40,7 +40,7 @@ function injectUI() {
 
     const container = document.createElement('div');
     container.id = 'pa-widget-container';
-    
+
     container.innerHTML = `
         <div id="pa-chat-modal">
             <div id="pa-chat-header">
@@ -52,7 +52,6 @@ function injectUI() {
                     </div>
                 </div>
                 <div class="pa-header-actions">
-                    <button id="pa-mute-btn" title="Toggle Sound" onclick="toggleMute()"></button>
                     <button id="pa-close-btn" title="Close">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
@@ -85,13 +84,8 @@ function injectUI() {
 
     document.body.appendChild(container);
 
-    // Make sure updateMuteUI from sounds.js is called
-    if (typeof updateMuteUI === 'function') {
-        updateMuteUI();
-    }
-
     setupEvents();
-    
+
     // Add initial greeting if empty
     setTimeout(() => {
         const body = document.getElementById('pa-chat-body');
@@ -111,13 +105,11 @@ function setupEvents() {
 
     bubble.addEventListener('click', () => {
         modal.classList.add('open');
-        if (typeof playMemeSound === 'function') playMemeSound('vine_boom');
         setTimeout(() => input.focus(), 300);
     });
 
     closeBtn.addEventListener('click', () => {
         modal.classList.remove('open');
-        if (typeof playMemeSound === 'function') playMemeSound('get_out');
     });
 
     sendBtn.addEventListener('click', handleSend);
@@ -130,13 +122,13 @@ function appendMessage(role, text) {
     const body = document.getElementById('pa-chat-body');
     const msgDiv = document.createElement('div');
     msgDiv.className = `pa-message ${role}`;
-    
+
     // Parse links and navigate tags
     let formattedText = text.replace(/\[NAVIGATE:(.*?)\]/g, ''); // Remove navigate tags from display
-    
+
     // Basic link formatting
     formattedText = formattedText.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" style="color: #fca5a5; text-decoration: underline;">$1</a>');
-    
+
     msgDiv.innerHTML = formattedText;
     body.appendChild(msgDiv);
     body.scrollTop = body.scrollHeight;
@@ -154,7 +146,7 @@ function appendQuickActions() {
     const body = document.getElementById('pa-chat-body');
     const actionDiv = document.createElement('div');
     actionDiv.className = 'pa-quick-actions';
-    
+
     const actions = [
         { label: "Show Projects 🚀", text: "Show me his projects!" },
         { label: "About Him 👨‍💻", text: "Tell me about Harshwardhan." },
@@ -167,7 +159,6 @@ function appendQuickActions() {
         btn.className = 'pa-quick-btn';
         btn.textContent = action.label;
         btn.onclick = () => {
-            if (typeof playMemeSound === 'function') playMemeSound('metal_pipe');
             document.getElementById('pa-chat-input').value = action.text;
             handleSend();
             // Remove quick actions after use
@@ -204,38 +195,46 @@ async function handleSend() {
     const text = input.value.trim();
     if (!text) return;
 
-    if (typeof playMemeSound === 'function') playMemeSound('vine_boom'); // Small pop for sending
-
     appendMessage('user', text);
     input.value = '';
-    
+
     showTyping();
 
     try {
-        // Use free Pollinations AI API
-        const response = await fetch('https://text.pollinations.ai/openai', {
+        // Use Google's Gemini API for lightning-fast responses
+        const GEMINI_API_KEY = 'YOUR_GEMINI_API_KEY_HERE'; // <-- PASTE YOUR GEMINI API KEY HERE
+
+        if (GEMINI_API_KEY === 'YOUR_GEMINI_API_KEY_HERE') {
+            console.warn("Please add your Gemini API Key. Falling back to offline mode.");
+            throw new Error("Missing Gemini API Key");
+        }
+
+        const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key=${GEMINI_API_KEY}`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({
-                messages: [
-                    { role: "system", content: SYSTEM_PROMPT },
-                    { role: "user", content: text }
+                systemInstruction: {
+                    parts: [{ text: SYSTEM_PROMPT }]
+                },
+                contents: [
+                    { parts: [{ text: text }] }
                 ],
-                seed: Math.floor(Math.random() * 1000000)
+                generationConfig: {
+                    temperature: 0.7,
+                }
             })
         });
 
-        if (!response.ok) throw new Error("API Error");
-        
+        if (!response.ok) throw new Error("API Error: " + response.statusText);
+
         const data = await response.json();
-        const botReply = data.choices[0].message.content;
-        
+        const botReply = data.candidates[0].content.parts[0].text;
+
         removeTyping();
-        if (typeof playMemeSound === 'function') playMemeSound('airhorn');
         appendMessage('bot', botReply);
 
     } catch (e) {
-        console.error("Free API failed, using fallback:", e);
+        console.error("API failed, using fallback:", e);
         // Fallback Logic
         setTimeout(() => {
             removeTyping();
@@ -247,44 +246,36 @@ async function handleSend() {
 
 function getFallbackResponse(text) {
     const lower = text.toLowerCase();
-    
+
     if (lower.includes('project') || lower.includes('work') || lower.includes('weather') || lower.includes('pharmacy')) {
-        if (typeof playMemeSound === 'function') playMemeSound('airhorn');
         return "Bet! Harshwardhan's got banger projects like a Weather App, Pride Pharmacy, and a BMI Calculator. Let's check 'em out! [NAVIGATE:mywork.html]";
     }
-    
+
     if (lower.includes('about') || lower.includes('skill') || lower.includes('mern') || lower.includes('who')) {
-        if (typeof playMemeSound === 'function') playMemeSound('ba_dum_tss');
         return "Say less! He's a full-stack MERN wizard, fr fr. Let me teleport you to the About Me page. [NAVIGATE:aboutme.html]";
     }
 
     if (lower.includes('resume') || lower.includes('cv')) {
-        if (typeof playMemeSound === 'function') playMemeSound('vine_boom');
         return "Here is his legendary resume, no cap: https://docs.google.com/document/d/19NxN0vEYSs44Med9wUc9VkTpJiHiTzsyyzKRHqWR3G8/edit?usp=sharing";
     }
 
     if (lower.includes('contact') || lower.includes('email') || lower.includes('phone') || lower.includes('whatsapp')) {
-        if (typeof playMemeSound === 'function') playMemeSound('ba_dum_tss');
         return "You can hit him up! \n📞 Call: +917588603477\n📧 Email: hppatilhpp@gmail.com\nAlso check his LinkedIn/GitHub! W.";
     }
 
     if (lower.includes('hi') || lower.includes('hello') || lower.includes('hey') || lower.includes('yo')) {
-        if (typeof playMemeSound === 'function') playMemeSound('vine_boom');
         return "Yo! What's good? I'm his PA. Ask me about his projects, skills, or let me guide you around. Sheesh!";
     }
 
     if (lower.includes('home') || lower.includes('back')) {
-        if (typeof playMemeSound === 'function') playMemeSound('vine_boom');
         return "Going back to the main stage! [NAVIGATE:index.html]";
     }
 
     if (lower.includes('easter egg') || lower.includes('scream')) {
-        if (typeof playMemeSound === 'function') playMemeSound('scream');
         return "AAAHHHHHHHHHHHHHH!!! 😱";
     }
 
     // Default
-    if (typeof playMemeSound === 'function') playMemeSound('crickets');
     return "Lowkey, I'm offline right now so I can't look that up! But Harshwardhan is a W developer! Try asking about his **projects**, **resume**, or **contact info**.";
 }
 

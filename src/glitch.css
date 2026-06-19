@@ -107,27 +107,4 @@
     100% { transform: skew(0deg); }
 }
 
-/* Speaker Icon */
-.speaker-icon {
-    cursor: pointer;
-    color: rgba(255, 255, 255, 0.5);
-    transition: all 0.2s ease;
-    pointer-events: auto; /* Essential since parent header might have pointer-events-none */
-}
 
-.speaker-icon:hover {
-    color: #ef4444;
-    transform: scale(1.1) rotate(5deg);
-    filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.8));
-}
-
-.speaker-icon.playing {
-    color: #10b981;
-    animation: pulse-ring 1s infinite;
-}
-
-@keyframes pulse-ring {
-    0% { transform: scale(1); filter: drop-shadow(0 0 5px #10b981); }
-    50% { transform: scale(1.15); filter: drop-shadow(0 0 15px #10b981); }
-    100% { transform: scale(1); filter: drop-shadow(0 0 5px #10b981); }
-}
