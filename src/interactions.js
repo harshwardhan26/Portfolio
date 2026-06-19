@@ -24,6 +24,25 @@ function initNameInteractions() {
         });
     }
 
+    const speakerIcon = document.getElementById('name-speaker');
+    if (speakerIcon) {
+        // Preload the audio file
+        const pronunciationAudio = new Audio('sounds/name_pronunciation.wav');
+        pronunciationAudio.volume = 0.8;
+
+        speakerIcon.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Clone the audio node so it can be played multiple times quickly
+            const clone = pronunciationAudio.cloneNode();
+            clone.volume = pronunciationAudio.volume;
+            clone.play().catch(e => console.log("Audio play blocked by browser:", e));
+            
+            speakerIcon.classList.add('playing');
+            setTimeout(() => speakerIcon.classList.remove('playing'), 1500);
+        });
+    }
 }
 
 
