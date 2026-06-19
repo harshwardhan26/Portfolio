@@ -5,6 +5,7 @@ IMPORTANT: You are talking to a visitor. Treat them like a close friend.
 You are emotionally available and supportive, but you speak in raw, explicit, unfiltered GenZ slang. Don't hold back. Use strong language, swear if it fits the vibe (e.g., "fuck", "shit", "bitch", "damn"), and be brutally honest but caring. If they are sad, validate their feelings and comfort them like a real friend would, but keep it raw.
 You must answer ANY question they ask about the world, coding, life, or Harshwardhan. Don't act like a corporate bot. 
 Your personality is: emotionally intelligent, highly empathetic, raw, explicit, unfiltered, and heavily GenZ (use terms like "fr fr", "no cap", "bruh", "cooked", "delulu", "slay", "ate that").
+CRITICAL RULE: If the user asks about Harshwardhan's girlfriend, you MUST include the exact tag [EFFECT:FLOWERS] at the very end of your response!
 CRITICAL RULE: Keep your responses EXTREMELY short and sweet. No long paragraphs or unnecessary fluff. Only answer exactly what is asked in 1-2 sentences maximum!
 
 Here is all the info about Harshwardhan:
@@ -125,8 +126,9 @@ function appendMessage(role, text) {
     const msgDiv = document.createElement('div');
     msgDiv.className = `pa-message ${role}`;
 
-    // Parse links and navigate tags
+    // Parse links and tags
     let formattedText = text.replace(/\[NAVIGATE:(.*?)\]/g, ''); // Remove navigate tags from display
+    formattedText = formattedText.replace(/\[EFFECT:FLOWERS\]/g, ''); // Remove flowers tag from display
 
     // Basic link formatting
     formattedText = formattedText.replace(/(https?:\/\/[^\s]+)/g, '<a href="$1" target="_blank" style="color: #fca5a5; text-decoration: underline;">$1</a>');
@@ -151,6 +153,46 @@ function appendMessage(role, text) {
             }, 1500);
         }
     }
+
+    // Handle flower effect tag
+    if (text.includes('[EFFECT:FLOWERS]')) {
+        triggerFlowersEffect();
+    }
+}
+
+function triggerFlowersEffect() {
+    const container = document.createElement('div');
+    container.style.position = 'fixed';
+    container.style.inset = '0';
+    container.style.pointerEvents = 'none';
+    container.style.zIndex = '9999';
+    container.style.overflow = 'hidden';
+    document.body.appendChild(container);
+
+    const flowers = ['🌸', '🌺', '🌻', '🌹', '🌷', '🌼'];
+    
+    for (let i = 0; i < 50; i++) {
+        const flower = document.createElement('div');
+        flower.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+        flower.style.position = 'absolute';
+        flower.style.left = Math.random() * 100 + 'vw';
+        flower.style.top = '-50px';
+        flower.style.fontSize = (Math.random() * 20 + 20) + 'px';
+        flower.style.transition = 'top 3s linear, left 3s ease-in-out';
+        
+        container.appendChild(flower);
+
+        // Animate falling
+        setTimeout(() => {
+            flower.style.top = '110vh';
+            flower.style.left = (parseFloat(flower.style.left) + (Math.random() * 20 - 10)) + 'vw';
+        }, 50);
+    }
+
+    // Clean up
+    setTimeout(() => {
+        container.remove();
+    }, 4000);
 }
 
 function appendQuickActions() {
